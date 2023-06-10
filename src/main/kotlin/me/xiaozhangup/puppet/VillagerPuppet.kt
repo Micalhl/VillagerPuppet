@@ -6,8 +6,6 @@ import ink.ptms.adyeshach.core.entity.manager.ManagerType
 import me.xiaozhangup.puppet.loader.PuppetData
 import me.xiaozhangup.puppet.loader.PuppetData.savePuppets
 import me.xiaozhangup.puppet.misc.Puppet
-import me.xiaozhangup.slimecargo.events.prot.control.ActionType
-import me.xiaozhangup.slimecargo.events.prot.control.PermCheck
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
