@@ -31,6 +31,7 @@ object VillagerPuppet : Plugin() {
         private set
 
     val slimecargo by lazy { config.getBoolean("hook.slimecargo") }
+    val residenceEnabled = plugin.server.pluginManager.getPlugin("Residence") != null
 
     val puppets: ConcurrentHashMap<World, MutableList<Puppet>> = ConcurrentHashMap()
 
@@ -45,8 +46,16 @@ object VillagerPuppet : Plugin() {
     }
 
     fun Player.hasPerm(location: Location): Boolean {
-        return if (slimecargo) !PermCheck.quick(this, location, ActionType.OPEN)
+        return if (residenceEnabled) !PermCheck.quick(this, location, ActionType.OPEN)
         else return this.isOp
+    }
+    
+    fun Location.checkResidence(user: Player, flags: Flags): Boolean {
+        if (!residenceEnabled) return true
+        val residence = ResidenceApi.getResidenceManager().getByLoc(this)
+        return if (residence == null) true else (residence.ownerUUID == user.uniqueId || residence.permissions.playerHas(
+            user, flags, FlagPermissions.FlagCombo.OnlyTrue
+        ) || residence.permissions.playerHas(user, Flags.admin, FlagPermissions.FlagCombo.OnlyTrue))
     }
 
 }
