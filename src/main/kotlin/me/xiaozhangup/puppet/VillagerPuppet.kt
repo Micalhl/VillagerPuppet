@@ -46,16 +46,14 @@ object VillagerPuppet : Plugin() {
     }
 
     fun Player.hasPerm(location: Location): Boolean {
-        return if (residenceEnabled) !PermCheck.quick(this, location, ActionType.OPEN)
+        return if (residenceEnabled) location.checkResidence(this)
         else return this.isOp
     }
     
-    fun Location.checkResidence(user: Player, flags: Flags): Boolean {
+    fun Location.checkResidence(user: Player): Boolean {
         if (!residenceEnabled) return true
         val residence = ResidenceApi.getResidenceManager().getByLoc(this)
-        return if (residence == null) true else (residence.ownerUUID == user.uniqueId || residence.permissions.playerHas(
-            user, flags, FlagPermissions.FlagCombo.OnlyTrue
-        ) || residence.permissions.playerHas(user, Flags.admin, FlagPermissions.FlagCombo.OnlyTrue))
+        return if (residence == null) true else (residence.ownerUUID == user.uniqueId || residence.permissions.playerHas(user, Flags.admin, FlagPermissions.FlagCombo.OnlyTrue))
     }
 
 }
